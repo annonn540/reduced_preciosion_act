@@ -1,0 +1,33 @@
+models:
+  - cnn
+  - gcn
+  - mlpmixer
+  - mobilenet
+  - resnet
+  - vit
+
+activations:
+  - sigmoid
+  - tanh
+  - relu
+  - leaky_relu
+  - gelu
+  - prelu
+  - swish
+  - softplus
+
+datasets:
+  - cifar10
+  - cifar100
+
+precisions:
+  #- fp2
+  #- fp3
+  #- fp4
+  - fp6
+  #- fp8
+  #- fp32
+
+epochs: 10
+batch_size: 512
+learning_rate: 0.001
