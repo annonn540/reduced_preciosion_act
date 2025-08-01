@@ -99,9 +99,10 @@ def test_model(model, test_loader, criterion, device):
     
     return loss_total / len(test_loader), correct / total
 
-def run_experiment(models, activations, datasets, epochs=10, batch_size=128, learning_rate=0.001, precisions=["fp4"]):
+def run_experiment(models, activations, datasets, epochs=10, batch_size=128, learning_rate=0.001, precisions=["fp4"], softmax_precision="fp32"):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
+    print(f"Softmax precision: {softmax_precision}")
     
     memory_tracker = MemoryTracker(device)
 
@@ -121,7 +122,7 @@ def run_experiment(models, activations, datasets, epochs=10, batch_size=128, lea
             for model_name in models:
                 for activation_name in activations:
                     print(f"\n{'-'*30}")
-                    print(f"Training {model_name} ({precision}) with {activation_name} on {dataset_name}")
+                    print(f"Training {model_name} ({precision}) with {activation_name} on {dataset_name} (softmax: {softmax_precision})")
                     print(f"{'-'*30}")
                     
                     try:
@@ -129,7 +130,7 @@ def run_experiment(models, activations, datasets, epochs=10, batch_size=128, lea
                             torch.cuda.empty_cache()
                         gc.collect()
                         
-                        model = get_model(model_name, input_shape, num_classes, activation_name, precision)
+                        model = get_model(model_name, input_shape, num_classes, activation_name, precision, softmax_precision)
                         model = model.to(device)
                         
                         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
@@ -184,7 +185,8 @@ if __name__ == "__main__":
             epochs=config.get("epochs", 10),
             batch_size=config.get("batch_size", 128),
             learning_rate=config.get("learning_rate", 0.001),
-            precisions=config.get("precisions", ["fp4"])
+            precisions=config.get("precisions", ["fp4"]),
+            softmax_precision=config.get("softmax_precision", "fp32")
         )
         plot_results("final_results.csv")
         

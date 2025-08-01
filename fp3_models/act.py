@@ -103,12 +103,3 @@ class FP3Softplus(nn.Module):
 
     def forward(self, x):
         return self.fp3(self.softplus(x))
-
-class FP3Softmax(nn.Module):
-    def __init__(self, dim=1):
-        super().__init__()
-        self.fp3 = LearnableFP3Activation()
-        self.softmax = nn.Softmax(dim=dim)
-
-    def forward(self, x):
-        return self.fp3(self.softmax(x))

@@ -8,7 +8,7 @@ import os
 
 sys.path.append(os.getcwd())
 
-def get_model(name, input_shape, num_classes, activation, precision="fp4"):
+def get_model(name, input_shape, num_classes, activation, precision="fp4", use_softmax=False, softmax_precision="fp32"):
     fp2_model_map = {
         "cnn": "fp2_models.fp2_cnn.FP2CNN",
         "gcn": "fp2_models.fp2_gcn.FP2GCN",
@@ -92,6 +92,8 @@ def get_model(name, input_shape, num_classes, activation, precision="fp4"):
     elif name == "vit":
         img_size = input_shape[1] if len(input_shape) == 3 else 28  # Default for MNIST
         return model_class(img_size=img_size, num_classes=num_classes, activation=activation)
+    elif name == "cnn":
+        return model_class(num_classes=num_classes, activation=activation, use_softmax=use_softmax, softmax_precision=softmax_precision)
     else:
         return model_class(num_classes=num_classes, activation=activation)
 

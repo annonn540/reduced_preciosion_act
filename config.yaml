@@ -28,6 +28,9 @@ precisions:
   #- fp8
   #- fp32
 
+use_softmax: true
+softmax_precision: fp32
+
 epochs: 10
 batch_size: 512
 learning_rate: 0.001

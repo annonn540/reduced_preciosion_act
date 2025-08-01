@@ -102,12 +102,3 @@ class FP2Softplus(nn.Module):
 
     def forward(self, x):
         return self.fp2(self.softplus(x))
-
-class FP2Softmax(nn.Module):
-    def __init__(self, dim=1):
-        super().__init__()
-        self.fp2 = LearnableFP2Activation()
-        self.softmax = nn.Softmax(dim=dim)
-
-    def forward(self, x):
-        return self.fp2(self.softmax(x))

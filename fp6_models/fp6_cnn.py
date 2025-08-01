@@ -3,7 +3,7 @@ import torch.nn as nn
 from fp6_models.act import FP6ReLU, FP6Sigmoid, FP6Tanh, FP6GELU, FP6LeakyReLU, FP6PReLU, FP6Swish, FP6Softplus
 
 class FP6CNN(nn.Module):
-    def __init__(self, num_classes=10, activation="relu"):
+    def __init__(self, num_classes=10, activation="relu", use_softmax=False, softmax_precision="fp6"):
         super().__init__()
         
         activation_map = {
@@ -61,13 +61,24 @@ class FP6CNN(nn.Module):
         )
         
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.classifier = nn.Sequential(
-            nn.Dropout(0.5),
-            nn.Linear(512, 256),
-            ActivationClass(),
-            nn.Dropout(0.5),
-            nn.Linear(256, num_classes)
-        )
+        if use_softmax:
+            from softmax_layers.softmax_layers import get_softmax_layer
+            self.classifier = nn.Sequential(
+                nn.Dropout(0.5),
+                nn.Linear(512, 256),
+                ActivationClass(),
+                nn.Dropout(0.5),
+                nn.Linear(256, num_classes),
+                get_softmax_layer(softmax_precision, dim=1)
+            )
+        else:
+            self.classifier = nn.Sequential(
+                nn.Dropout(0.5),
+                nn.Linear(512, 256),
+                ActivationClass(),
+                nn.Dropout(0.5),
+                nn.Linear(256, num_classes)
+            )
 
     def forward(self, x):
         x = self.features(x)

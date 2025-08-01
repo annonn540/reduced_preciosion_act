@@ -3,7 +3,7 @@ import torch.nn as nn
 from fp2_models.act import FP2ReLU, FP2Sigmoid, FP2Tanh, FP2GELU, FP2LeakyReLU, FP2PReLU, FP2Swish, FP2Softplus
 
 class FP2CNN(nn.Module):
-    def __init__(self, num_classes=10, activation="relu"):
+    def __init__(self, num_classes=10, activation="relu", use_softmax=False, softmax_precision="fp2"):
         super().__init__()
         
         activation_map = {
@@ -61,13 +61,24 @@ class FP2CNN(nn.Module):
         )
         
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.classifier = nn.Sequential(
-            nn.Dropout(0.5),
-            nn.Linear(512, 256),
-            ActivationClass(),
-            nn.Dropout(0.5),
-            nn.Linear(256, num_classes)
-        )
+        if use_softmax:
+            from softmax_layers.softmax_layers import get_softmax_layer
+            self.classifier = nn.Sequential(
+                nn.Dropout(0.5),
+                nn.Linear(512, 256),
+                ActivationClass(),
+                nn.Dropout(0.5),
+                nn.Linear(256, num_classes),
+                get_softmax_layer(softmax_precision, dim=1)
+            )
+        else:
+            self.classifier = nn.Sequential(
+                nn.Dropout(0.5),
+                nn.Linear(512, 256),
+                ActivationClass(),
+                nn.Dropout(0.5),
+                nn.Linear(256, num_classes)
+            )
 
     def forward(self, x):
         x = self.features(x)

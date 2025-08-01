@@ -109,12 +109,3 @@ class FP6Softplus(nn.Module):
 
     def forward(self, x):
         return self.fp6(self.softplus(x))
-
-class FP6Softmax(nn.Module):
-    def __init__(self, dim=1):
-        super().__init__()
-        self.fp6 = LearnableFP6Activation()
-        self.softmax = nn.Softmax(dim=dim)
-
-    def forward(self, x):
-        return self.fp6(self.softmax(x))
