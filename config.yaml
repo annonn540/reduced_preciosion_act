@@ -29,7 +29,7 @@ precisions:
   #- fp32
 
 use_softmax: true
-softmax_precision: fp32
+softmax_precision: fp32 # Options: fp2, fp3, fp4, fp6, fp8, fp32
 
 epochs: 10
 batch_size: 512
