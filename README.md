@@ -10,7 +10,8 @@ This project implements and compares neural network models using different float
 
 - **Multiple Precision Support**: FP2, FP3, FP4, FP6, FP8, and FP32
 - **6 Neural Network Architectures**: CNN, GCN, MLP-Mixer, MobileNetV2, ResNet18, Vision Transformer
-- **9 Activation Functions**: ReLU, Sigmoid, Tanh, GELU, Leaky ReLU, PReLU, Swish, Softplus, Softmax
+- **9 Activation Functions**: ReLU, Sigmoid, Tanh, GELU, Leaky ReLU, PReLU, Swish, Softplus
+- **Precision-Specific Softmax**: Independent softmax precision control for output layers
 - **2 Datasets**: CIFAR-10, CIFAR-100
 - **Comprehensive Metrics**: Accuracy, loss, training time, memory usage
 - **Automated Visualization**: Performance plots and comparisons
@@ -45,6 +46,8 @@ This project implements and compares neural network models using different float
 │   ├── fp32_mobilenetv2.py
 │   ├── fp32_resnet18.py
 │   └── fp32_vit.py
+├── softmax_layers/                # Precision-specific softmax implementations
+│   └── softmax_layers.py
 ├── plots/                         # Generated visualization plots
 └── final_results.csv              # Experiment results
 ```
